@@ -40,7 +40,7 @@ class Item {
         return isChosen;
     }
 
-    void setChosen(Boolean chosen) {
+    void setChosen(boolean chosen) {
         isChosen = chosen;
     }
 
