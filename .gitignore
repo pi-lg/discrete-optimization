@@ -1,3 +1,11 @@
 *.zip
 *.pdf
 */_coursera
+
+# intellij files
+*.idea/
+*/out/
+*/src/META-INF/
+*.iml
+
+*/__pycache__/
