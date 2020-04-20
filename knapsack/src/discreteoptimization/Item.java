@@ -1,13 +1,13 @@
 package discreteoptimization;
 
-public class Item {
+class Item {
     private int index;
     private int value;
     private int weight;
     private double valueToWeightRatio;
     private boolean isChosen;
 
-    public Item(int index, int value, int weight) {
+    Item(int index, int value, int weight) {
         this.index = index;
         this.value = value;
         this.weight = weight;
@@ -20,31 +20,31 @@ public class Item {
         this.setChosen(isChosen);
     }
 
-    public int getIndex() {
+    int getIndex() {
         return index;
     }
 
-    public int getValue() {
+    int getValue() {
         return value;
     }
 
-    public int getWeight() {
+    int getWeight() {
         return weight;
     }
 
-    public double getValueToWeightRatio() {
+    double getValueToWeightRatio() {
         return valueToWeightRatio;
     }
 
-    public Boolean getChosen() {
+    boolean getChosen() {
         return isChosen;
     }
 
-    public void setChosen(Boolean chosen) {
+    void setChosen(Boolean chosen) {
         isChosen = chosen;
     }
 
-    public Item copy() {
+    Item copy() {
         return new Item(index, value, weight, isChosen);
     }
 
