@@ -1,6 +1,8 @@
 package discreteoptimization;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class DepthFirstSearch {
@@ -27,8 +29,18 @@ public class DepthFirstSearch {
     }
 
     public void run() {
-
+        System.out.println("Capacity of knapsack: " + capacity);
+        System.out.println("number of items = " + items.size());
+        System.out.println("weightOfSmallestItem = " + weightOfSmallestItem);
+        Comparator<Item> compareByWeight = Comparator.comparing(Item::getWeight);
+        Comparator<Item> compareByValueWeightRatio = Comparator.comparing(Item::getValueToWeightRatio).reversed();
+        Collections.sort(items, compareByWeight);
+        for(int i=0; i<5; i++) {
+            System.out.println("weight of lightest item" + (i + 1) + " is " + items.get(i).getWeight());
+        }
+        Collections.sort(items, compareByValueWeightRatio);
         exploreDeep();
+
     }
 
     public boolean[] getChosenOfBestPath() {
@@ -82,8 +94,16 @@ public class DepthFirstSearch {
                 exploreDeep();
             } else {
 //                System.out.println("Leaving item " + position + " behind.");
+//                System.out.println("Capacity left: " + capacity + ", item weight: " + items.get(position).getWeight() + ", item value; " + items.get(position).getValue() + ", optimistic path value before dismissal: " + optimisticValueOfCurrentPath);
                 dismissItem();
+//                System.out.println("Optimistic path value after dismissal: " + optimisticValueOfCurrentPath);
+//                System.out.println("value of best path: " + valueOfBestPath);
+//                System.out.println("weight of smallest item: " + weightOfSmallestItem);
                 position++;
+                while(position<items.size()-1 && items.get(position).getWeight() > capacity) {
+                    dismissItem();
+                    position++;
+                }
                 exploreDeep();
             }
         } else {
