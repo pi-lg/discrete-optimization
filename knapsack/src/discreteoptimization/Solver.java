@@ -1,10 +1,8 @@
 package discreteoptimization;
 
 import java.io.*;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.ArrayList;
+import java.sql.Array;
+import java.util.*;
 
 /**
  * The class <code>Solver</code> is an implementation of a greedy algorithm to solve the knapsack problem.
@@ -35,14 +33,13 @@ public class Solver {
                 fileName = arg.substring(6);
             } 
         }
-        System.out.println(fileName);
         if(fileName == null)
             return;
         
         // read the lines out of the file
         List<String> lines = new ArrayList<String>();
 
-        BufferedReader input =  new BufferedReader(new FileReader(fileName));
+        BufferedReader input = new BufferedReader(new FileReader(fileName));
         try {
             String line = null;
             while (( line = input.readLine()) != null){
@@ -81,19 +78,29 @@ public class Solver {
             if(weight + item.getWeight() <= capacity){
                 item.setChosen(true);
                 value += item.getValue();
-                System.out.println("Value to weight ratio: " + item.getValueToWeightRatio());
+//                System.out.println("Value to weight ratio: " + item.getValueToWeightRatio());
                 weight += item.getWeight();
             } else {
                 break;
             }
         }
-        
+
         // prepare the solution in the specified output format
-        System.out.println(value+" 0");
+//        System.out.println("greedy algorithm:");
+//        System.out.println(value+" 0");
+//        Collections.sort(items, initialOrder);
+//        for(Item item: items){
+//            System.out.print(Integer.toString(item.getChosen() ? 1 : 0)+" ");
+//        }
+//        System.out.println("");
+        BranchAndBound branchAndBound = new BranchAndBound(BranchAndBound.SearchType.DEPTH_FIRST, items, capacity);
+        KnapSackResult resultBranchAndBound = branchAndBound.run();
+//        System.out.println("branch and bound");
+        System.out.println(resultBranchAndBound.totalValue+" 0");
         Collections.sort(items, initialOrder);
         for(Item item: items){
             System.out.print(Integer.toString(item.getChosen() ? 1 : 0)+" ");
         }
-        System.out.println("");        
+        System.out.println("");
     }
 }
