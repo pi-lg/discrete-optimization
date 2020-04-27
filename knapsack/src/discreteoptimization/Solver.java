@@ -95,6 +95,12 @@ public class Solver {
 //        System.out.println("");
         BranchAndBound branchAndBound = new BranchAndBound(BranchAndBound.SearchType.DEPTH_FIRST, items, capacity);
         KnapSackResult resultBranchAndBound = branchAndBound.run();
+//        System.out.println("resultBranchAndBound.totalWeight = " + resultBranchAndBound.totalWeight);
+//        System.out.println("resultBranchAndBound.totalValue = " + resultBranchAndBound.totalValue);
+//        Comparator<Item> compareByWeight = Comparator.comparing(Item::getWeight);
+//        Collections.sort(items, compareByWeight);
+//        System.out.println("items.get(0).getChosen() = " + items.get(0).getChosen());
+//        System.out.println("items.get(0).getValue() = " + items.get(0).getValue());
 //        System.out.println("branch and bound");
         System.out.println(resultBranchAndBound.totalValue+" 0");
         Collections.sort(items, initialOrder);

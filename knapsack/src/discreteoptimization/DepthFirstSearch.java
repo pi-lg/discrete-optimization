@@ -29,15 +29,15 @@ public class DepthFirstSearch {
     }
 
     public void run() {
-        System.out.println("Capacity of knapsack: " + capacity);
-        System.out.println("number of items = " + items.size());
-        System.out.println("weightOfSmallestItem = " + weightOfSmallestItem);
-        Comparator<Item> compareByWeight = Comparator.comparing(Item::getWeight);
+//        System.out.println("Capacity of knapsack: " + capacity);
+//        System.out.println("number of items = " + items.size());
+//        System.out.println("weightOfSmallestItem = " + weightOfSmallestItem);
+//        Comparator<Item> compareByWeight = Comparator.comparing(Item::getWeight);
         Comparator<Item> compareByValueWeightRatio = Comparator.comparing(Item::getValueToWeightRatio).reversed();
-        Collections.sort(items, compareByWeight);
-        for(int i=0; i<5; i++) {
-            System.out.println("weight of lightest item" + (i + 1) + " is " + items.get(i).getWeight());
-        }
+//        Collections.sort(items, compareByWeight);
+//        for(int i=0; i<5; i++) {
+//            System.out.println("weight of lightest item" + (i + 1) + " is " + items.get(i).getWeight());
+//        }
         Collections.sort(items, compareByValueWeightRatio);
         exploreDeep();
 
@@ -80,7 +80,7 @@ public class DepthFirstSearch {
         } else if(position<0) {
             return;
         } else if (Double.max(valueOfCurrentPath, optimisticValueOfCurrentPath) > valueOfBestPath) {
-            if(items.get(position).getWeight() < capacity) {
+            if(items.get(position).getWeight() <= capacity) {
                 packItem();
                 position++;
                 exploreDeep();
