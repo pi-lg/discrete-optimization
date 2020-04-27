@@ -63,7 +63,7 @@ public class Solver {
         for(int i=1; i < num_items+1; i++){
             String line = lines.get(i);
             String[] parts = line.split("\\s+");
-            items.add(new Item(i, Integer.parseInt(parts[0]), Integer.parseInt(parts[1])));
+            items.add(new Item(i - 1, Integer.parseInt(parts[0]), Integer.parseInt(parts[1])));
             values[i-1] = Integer.parseInt(parts[0]);
             weights[i-1] = Integer.parseInt(parts[1]);
         }

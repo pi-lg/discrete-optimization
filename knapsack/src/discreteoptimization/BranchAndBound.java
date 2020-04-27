@@ -105,6 +105,7 @@ public class BranchAndBound {
         for(Item item: items) {
             item.setChosen(bestCombination.contains(item.getIndex()));
         }
+
         return new KnapSackResult(valueOfBestCombination, weightOfBestCombination);
     }
 
