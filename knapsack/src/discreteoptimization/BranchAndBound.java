@@ -2,7 +2,6 @@ package discreteoptimization;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class BranchAndBound {
     public enum SearchType {
@@ -42,11 +41,11 @@ public class BranchAndBound {
 
     public KnapSackResult run() {
         Collections.sort(items, compareByValueDensityHighestFirst);
-        if(items.size()<=10) {
+        if(items.size()<=2) {
             return solveBruteForce();
         } else if(searchType==SearchType.DEPTH_FIRST) {
             DepthFirstSearch depthFirstSearch = new DepthFirstSearch(
-                    items, knapSackCapacity, findInitialOptimisticValue(), weightOfSmallestItem
+                    items, knapSackCapacity, weightOfSmallestItem
             );
             depthFirstSearch.run();
             valueOfBestPath = depthFirstSearch.getValueOfBestPath();
@@ -129,19 +128,4 @@ public class BranchAndBound {
 
 //    private void fillUpWithHighestValueItem
 
-    private double findInitialOptimisticValue() {
-        int weight = 0;
-        double value = 0;
-        for(Item item: this.items) {
-            if(weight + item.getWeight() < knapSackCapacity) {
-                value += item.getValue();
-                weight += item.getWeight();
-            } else {
-                int residualWeight = knapSackCapacity - weight;
-                value += residualWeight * 1.0 / item.getWeight() * item.getValue();
-                break;
-            }
-        }
-        return value;
-    }
 }

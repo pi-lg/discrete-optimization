@@ -15,7 +15,7 @@ def solve_it(input_data):
 
     # Runs the command: java Solver -file=tmp.data
 
-    process = Popen(['java', '-jar', 'out/artifacts/knapsack_jar/knapsack.jar', '-file=' + tmp_file_name], stdout=PIPE, universal_newlines=True)
+    process = Popen(['java', '-jar', '-Xss800m', 'out/artifacts/knapsack_jar/knapsack.jar', '-file=' + tmp_file_name], stdout=PIPE, universal_newlines=True)
     (stdout, stderr) = process.communicate()
 
     # removes the temporay file
