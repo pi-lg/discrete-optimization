@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from graph_coloring import Graph
 
 
 def solve_it(input_data):
@@ -18,13 +19,22 @@ def solve_it(input_data):
         parts = line.split()
         edges.append((int(parts[0]), int(parts[1])))
 
-    # build a trivial solution
-    # every node has its own color
-    solution = range(0, node_count)
+    graph = Graph(edges, node_count, edge_count)
+    graph.color()
+    # print("number of nodes: {}, number of edges: {}".format(node_count, edge_count))
+    # print("number of colors used was: {}".format(max(graph.set_of_used_colors)))
+    output_data = str(max(graph.set_of_used_colors)) + ' ' + str(0) + '\n'
+    output_data += ' '.join([str(graph.vertices[i].color) for i in range(node_count)])
 
-    # prepare the solution in the specified output format
-    output_data = str(node_count) + ' ' + str(0) + '\n'
-    output_data += ' '.join(map(str, solution))
+
+
+    # # build a trivial solution
+    # # every node has its own color
+    # solution = range(0, node_count)
+    #
+    # # prepare the solution in the specified output format
+    # output_data = str(node_count) + ' ' + str(0) + '\n'
+    # output_data += ' '.join(map(str, solution))
 
     return output_data
 
