@@ -3,18 +3,18 @@ from random import choice
 
 
 class Vertex:
-    def __init__(self, index: int, edges: set = None):
+    def __init__(self, index: int, edges: Set['Vertex'] = None) -> None:
         self.index = index
         if not edges:
             edges = set()
         self.edges = edges
-        self.color = None
-        self.impossible_colors = set()
+        self.color: int = None
+        self.impossible_colors: Set[int] = set()
 
-    def add_link(self, vertex: 'Vertex'):
+    def add_link(self, vertex: 'Vertex') -> None:
         self.edges.add(vertex)
 
-    def paint(self, _color: int):
+    def paint(self, _color: int) -> None:
         if self.color:
             raise Exception("Cannot assign color {} to Vertex {} as it already has color {}".format(
                 _color, self.index, self.color))
@@ -25,22 +25,22 @@ class Vertex:
             for edge in self.edges:
                 edge.remove_from_possible_colors(_color)
 
-    def remove_from_possible_colors(self, _color: int):
+    def remove_from_possible_colors(self, _color: int) -> None:
         self.impossible_colors.add(_color)
 
 
 class Graph:
-    set_of_used_colors: Set[int] = set()
-    uncolored_vertices: List[Vertex] = []
 
-    def __init__(self, edges: list, num_vertices: int, num_edges: int):
+    def __init__(self, edges: List[tuple], num_vertices: int, num_edges: int) -> None:
         self.vertices = {i: Vertex(i) for i in range(num_vertices)}
         for edge in edges:
             i, j = edge
             self.vertices[i].add_link(self.vertices[j])
             self.vertices[j].add_link(self.vertices[i])
+            self.set_of_used_colors: Set[int] = set()
+            self.uncolored_vertices: List[Vertex] = []
 
-    def color_next_vertex(self):
+    def color_next_vertex(self) -> None:
         self.uncolored_vertices.sort(key=lambda v: (len(v.impossible_colors), len(v.edges)))
         vertex_to_color = self.uncolored_vertices.pop()
         possible_colors = self.set_of_used_colors.difference(vertex_to_color.impossible_colors)
@@ -58,7 +58,7 @@ class Graph:
             vertex_to_color.paint(new_color)
             self.set_of_used_colors.add(new_color)
 
-    def color(self):
+    def color(self) -> None:
         self.uncolored_vertices = list(self.vertices.values())
         while self.uncolored_vertices:
             self.color_next_vertex()
