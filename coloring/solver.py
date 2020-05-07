@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from graph_coloring import Graph
+from own_solver import Graph
 
 
 def solve_it(input_data):
