@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from own_solver import Graph
-
+from ortools_solver import solve
 
 def solve_it(input_data):
     # Modify this code to run your optimization algorithm
@@ -19,12 +19,21 @@ def solve_it(input_data):
         parts = line.split()
         edges.append((int(parts[0]), int(parts[1])))
 
-    graph = Graph(edges, node_count, edge_count)
-    graph.color()
+    if node_count < 100:
+        # solving with ortools
+        number_of_colors, is_optimal, colors = solve(edges, node_count)
+    else:
+        # solving with own algorithm
+        graph = Graph(edges, node_count, edge_count)
+        graph.color()
+        number_of_colors = max(graph.set_of_used_colors)
+        is_optimal = 0
+        colors = [graph.vertices[i].color for i in range(node_count)]
+
     # print("number of nodes: {}, number of edges: {}".format(node_count, edge_count))
     # print("number of colors used was: {}".format(max(graph.set_of_used_colors)))
-    output_data = str(max(graph.set_of_used_colors)) + ' ' + str(0) + '\n'
-    output_data += ' '.join([str(graph.vertices[i].color) for i in range(node_count)])
+    output_data = str(number_of_colors) + ' ' + str(is_optimal) + '\n'
+    output_data += ' '.join([str(color) for color in colors])
 
 
 
