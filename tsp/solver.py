@@ -3,11 +3,13 @@
 
 import math
 from collections import namedtuple
+from utils import Point
+from local_search_solver import solve
 
-Point = namedtuple("Point", ['x', 'y'])
 
 def length(point1, point2):
     return math.sqrt((point1.x - point2.x)**2 + (point1.y - point2.y)**2)
+
 
 def solve_it(input_data):
     # Modify this code to run your optimization algorithm
@@ -22,7 +24,7 @@ def solve_it(input_data):
         line = lines[i]
         parts = line.split()
         points.append(Point(float(parts[0]), float(parts[1])))
-
+    solve(points)
     # build a trivial solution
     # visit the nodes in the order they appear in the file
     solution = range(0, nodeCount)
