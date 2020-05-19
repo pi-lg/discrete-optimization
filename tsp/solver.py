@@ -24,10 +24,11 @@ def solve_it(input_data):
         line = lines[i]
         parts = line.split()
         points.append(Point(float(parts[0]), float(parts[1])))
-    solve(points)
+    best_path, distance, _ = solve(points)
     # build a trivial solution
     # visit the nodes in the order they appear in the file
-    solution = range(0, nodeCount)
+    # solution = range(0, nodeCount)
+    solution = best_path
 
     # calculate the length of the tour
     obj = length(points[solution[-1]], points[solution[0]])
@@ -35,7 +36,7 @@ def solve_it(input_data):
         obj += length(points[solution[index]], points[solution[index+1]])
 
     # prepare the solution in the specified output format
-    output_data = '%.2f' % obj + ' ' + str(0) + '\n'
+    output_data = '%.2f' % distance + ' ' + str(0) + '\n'
     output_data += ' '.join(map(str, solution))
 
     return output_data
