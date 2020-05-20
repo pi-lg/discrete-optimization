@@ -7,10 +7,9 @@ from collections import namedtuple
 DistanceTo = namedtuple("DistanceTo", ["index", "distance"])
 
 
-# TODO Introduce randomness in close neighbor selection (only select vertices which are shorter than the one to subsitute
-def choose_close_unused_vertex_for_next(ordered_distances: List[DistanceTo], current_distance: float,
-                                        entropy: float = 0.0, vertices_not_to_choose: Set[int] = set()
-                                        ) -> Tuple[int, float]:
+def choose_close_unused_vertex(ordered_distances: List[DistanceTo], current_distance: float,
+                               entropy: float = 0.0, vertices_not_to_choose: Set[int] = set()
+                               ) -> Tuple[int, float]:
     # if len(ordered_distances) > len(vertices_not_to_choose):
     while True:
         for point in ordered_distances:
@@ -77,7 +76,7 @@ def solve(points: List[Point]) -> Tuple[List[int], float, List[float]]:
         for _ in range(100000):
             # print(distance_dict[_next])
             # print("---------------------------------")
-            close_to_next, distance = choose_close_unused_vertex_for_next(
+            close_to_next, distance = choose_close_unused_vertex(
                 distance_dict[_next],
                 current_distance=distance_matrix[path[0], _next],
                 entropy=0.8,
