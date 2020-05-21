@@ -1,17 +1,10 @@
 *.zip
-*.pdf
-*/_coursera
 
 # intellij files
-*.idea/
 */out/
 */src/META-INF/
-*.iml
 
 */__pycache__/
-
-# data files
-*/data/*
 
 #
 */.ipynb_checkpoints/*

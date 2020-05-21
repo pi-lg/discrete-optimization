@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="ca697ecb-2cf8-4ca3-a202-60d676b1477f" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeInsightWorkspaceSettings">
+    <option name="optimizeImportsOnTheFly" value="true" />
+  </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="1" />
+  </component>
+  <component name="ProjectId" id="1bUJAbbFxGqkEGRfQTqqqw8MDt1" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.folding" />
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <module name="graph-coloring" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="ortools_solver" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="graph-coloring" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ortools_solver.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.ortools_solver" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ca697ecb-2cf8-4ca3-a202-60d676b1477f" name="Default Changelist" comment="" />
+      <created>1588680595847</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1588680595847</updated>
+      <workItem from="1588680608865" duration="23758000" />
+      <workItem from="1588751135318" duration="3071000" />
+      <workItem from="1588850978350" duration="584000" />
+      <workItem from="1588851582081" duration="1649000" />
+      <workItem from="1588857140220" duration="16344000" />
+      <workItem from="1589544492885" duration="28000" />
+      <workItem from="1589544534051" duration="94000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="2" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="732" y="439" width="519" height="226" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1588703340644">
+      <screen x="67" y="27" width="1853" height="1052" />
+    </state>
+    <state x="732" y="439" width="519" height="226" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/67.27.1853.1052@67.27.1853.1052" timestamp="1588703340644" />
+    <state x="777" y="295" width="424" height="521" key="FileChooserDialogImpl" timestamp="1589544612630">
+      <screen x="67" y="27" width="1853" height="1052" />
+    </state>
+    <state x="777" y="295" width="424" height="521" key="FileChooserDialogImpl/67.27.1853.1052@67.27.1853.1052" timestamp="1589544612630" />
+    <state x="479" y="125" width="1024" height="853" key="SettingsEditor" timestamp="1588702536728">
+      <screen x="67" y="27" width="1853" height="1052" />
+    </state>
+    <state x="479" y="125" width="1024" height="853" key="SettingsEditor/67.27.1853.1052@67.27.1853.1052" timestamp="1588702536728" />
+    <state x="741" y="232" width="501" height="623" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1588864014591">
+      <screen x="67" y="27" width="1853" height="1052" />
+    </state>
+    <state x="741" y="232" width="501" height="623" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/67.27.1853.1052@67.27.1853.1052" timestamp="1588864014591" />
+    <state x="682" y="258" width="623" height="580" key="find.popup" timestamp="1588706316221">
+      <screen x="67" y="27" width="1853" height="1052" />
+    </state>
+    <state x="682" y="258" width="623" height="580" key="find.popup/67.27.1853.1052@67.27.1853.1052" timestamp="1588706316221" />
+    <state x="301" y="125" width="1380" height="853" key="new project wizard" timestamp="1589544626337">
+      <screen x="67" y="27" width="1853" height="1052" />
+    </state>
+    <state x="301" y="125" width="1380" height="853" key="new project wizard/67.27.1853.1052@67.27.1853.1052" timestamp="1589544626337" />
+    <state x="828" y="296" width="327" height="487" key="refactoring.ChangeSignatureDialog" timestamp="1588693246671">
+      <screen x="67" y="27" width="1853" height="1052" />
+    </state>
+    <state x="828" y="296" width="327" height="487" key="refactoring.ChangeSignatureDialog/67.27.1853.1052@67.27.1853.1052" timestamp="1588693246671" />
+    <state x="656" y="251" width="672" height="678" key="search.everywhere.popup" timestamp="1588864372470">
+      <screen x="67" y="27" width="1853" height="1052" />
+    </state>
+    <state x="656" y="251" width="672" height="678" key="search.everywhere.popup/67.27.1853.1052@67.27.1853.1052" timestamp="1588864372470" />
+  </component>
+</project>
