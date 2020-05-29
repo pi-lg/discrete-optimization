@@ -72,7 +72,8 @@ def get_distances_to_point(index: int, distances: List[np.array]) -> np.array:
 
 
 def solve(points: List[Point], prop_of_closest_neighbors_to_store: float = 0.05, min_num_neighbors: int = 20,
-          max_num_neighbors: int = 100) -> Tuple[List[int], float, List[float]]:
+          max_num_neighbors: int = 100, prop_long_path_exploration: float = 0.2,
+          prop_of_edges_to_sample_to_find_long_path: float = 0.05) -> Tuple[List[int], float, List[float]]:
     dim = len(points)
     print("number of points is: %i" % dim)
     sys.stdout.flush()
@@ -130,8 +131,19 @@ def solve(points: List[Point], prop_of_closest_neighbors_to_store: float = 0.05,
         path = best_path.copy()
         distance_path = distance_best_path
         # choose starting vertex
-        # TODO: alternate between random start and start at one of the longest existing paths
-        start = np.random.randint(dim)
+        if random.random() < prop_long_path_exploration:
+            start, long_path_distance = (0, 0.0)
+            # sample_indices = sorted(
+            #     random.choices(range(dim), k=round(dim * prop_of_edges_to_sample_to_find_long_path)))
+            # for i in sample_indices:
+            for i in range(dim):
+                if random.random() < prop_of_edges_to_sample_to_find_long_path:
+                    distance = get_distance(path[i], path[i + 1 if i < (dim - 1) else 0], distances)
+                    if distance > long_path_distance:
+                        start = i
+                        long_path_distance = distance
+        else:
+            start = np.random.randint(dim)
         # print("dim = %d, start = %d" % (dim, start))
         # rearrange path so start is the start of the cycle
         # TODO: Make path dllist and adjust rotation
