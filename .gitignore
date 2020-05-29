@@ -1,6 +1,7 @@
 *.zip
 
 # intellij files
+*/.idea/workspace.xml
 */out/
 */src/META-INF/
 
