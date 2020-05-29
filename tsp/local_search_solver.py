@@ -3,25 +3,40 @@ from utils import Point
 import numpy as np
 import random
 from collections import namedtuple
+from llist import dllist
+import multiprocessing as mp
+import sys
 
 DistanceTo = namedtuple("DistanceTo", ["index", "distance"])
 
 
-def choose_close_unused_vertex(ordered_distances: List[DistanceTo], current_distance: float,
-                               entropy: float = 0.0, vertices_not_to_choose: Set[int] = set()
+def choose_close_unused_vertex(ordered_distances: List[DistanceTo], distances_to_point: np.array,
+                               current_distance: float, entropy: float = 0.0, vertices_not_to_choose: Set[int] = set()
                                ) -> Tuple[int, float]:
     # if len(ordered_distances) > len(vertices_not_to_choose):
-    while True:
-        for point in ordered_distances:
-            if point.distance > current_distance:
-                break
-            elif random.random() >= entropy and point.index not in vertices_not_to_choose:
-                # print("point %i is available" % point.index)
-                return point.index, point.distance
+    available_points = set(
+        [point.index for point in ordered_distances if point.distance <= current_distance]
+    ).difference(vertices_not_to_choose)
+    if not available_points:
+        index_of_closest, distance_of_closest = (-1, current_distance)
+        for index, distance in enumerate(distances_to_point):
+            if distance <= distance_of_closest and index not in vertices_not_to_choose:
+                index_of_closest = index
+                distance_of_closest = distance
+        return index_of_closest, distance_of_closest
+    else:
+        while True:
+            for point in ordered_distances:
+                if point.distance > current_distance:
+                    break
+                elif random.random() >= entropy and point.index not in vertices_not_to_choose:
+                    # print("point %i is available" % point.index)
+                    return point.index, point.distance
     # else:
     #     raise Exception("No more Points to")
 
 
+# TODO: Adjust swapping once path is a dllist
 def swap_elements(path: List[int], position_of_next: int, position_of_freed_up_element: int) -> List[int]:
     if position_of_next >= position_of_freed_up_element:
         raise Exception("First element %d is not smaller in position than second element %d"
@@ -32,41 +47,94 @@ def swap_elements(path: List[int], position_of_next: int, position_of_freed_up_e
     return path
 
 
-def solve(points: List[Point]) -> Tuple[List[int], float, List[float]]:
+def compute_distance(i: Point, j: Point):
+    return np.sqrt((i.x - j.x)**2 + (i.y - j.y)**2)
+
+
+def compute_distances(start: int, dim: int, points: List[Point]) -> np.array:
+    distances = np.zeros(dim - (start + 1))
+    for later_point in range(start + 1, dim):
+        distances[later_point - (start + 1)] = compute_distance(points[start], points[later_point])
+    return distances
+
+
+def get_distance(i: int, j: int, distances: List[np.array]) -> float:
+    sorted_indices = sorted([i, j])
+    return distances[sorted_indices[0]][sorted_indices[1] - (sorted_indices[0] + 1)]
+
+
+def get_distances_to_point(index: int, distances: List[np.array]) -> np.array:
+    array = np.array([get_distance(index, j, distances) for j in range(index)] + [0.0])
+    if index == len(distances):
+        return array
+    else:
+        return np.concatenate((array, distances[index]))
+
+
+def solve(points: List[Point], prop_of_closest_neighbors_to_store: float = 0.05, min_num_neighbors: int = 20,
+          max_num_neighbors: int = 100) -> Tuple[List[int], float, List[float]]:
     dim = len(points)
-    distance_matrix = np.zeros((dim, dim))
-    for i in range(dim):
-        for j in range(i + 1, dim):
-            d = np.sqrt((points[i].x - points[j].x)**2 + (points[i].y - points[j].y)**2)
-            distance_matrix[i, j] = d
-            distance_matrix[j, i] = d
-    distance_dict = {}
-    for i in range(dim):
-        distances = [DistanceTo(index, distance) for index, distance in enumerate(distance_matrix[i]) if index != i]
-        distance_dict[i] = sorted(distances, key=lambda tup: tup.distance)
+    print("number of points is: %i" % dim)
+    sys.stdout.flush()
+    pool = mp.Pool(mp.cpu_count())
+    distances = [pool.apply(compute_distances, args=(start, dim, points)) for start in range(dim - 1)]
+    pool.close()
+    # distance_matrix = np.zeros((dim, dim))
     # for i in range(dim):
-    #     print(distance_dict[i])
-    # return
+    #     for j in range(i + 1, dim):
+    #         d = compute_distance(points[i], points[j])
+    #         distance_matrix[i, j] = d
+    #         distance_matrix[j, i] = d
+    # print("Distance MATRIX computed.")
+    # sys.stdout.flush()
+
+    num_neighbors_to_store = min(max_num_neighbors,
+                                 max(min_num_neighbors, round(prop_of_closest_neighbors_to_store * dim)))
+    neighbors = [None for i in range(dim)]
+    for i in range(dim):
+        n = dllist()
+        for index, distance in enumerate(get_distances_to_point(i, distances)):
+            if index == i:
+                continue
+            elif n.size == 0:
+                n.append(DistanceTo(index, distance))
+            elif n.last.value.distance > distance:
+                node = n.first
+                while node.value.distance <= distance:
+                    node = node.next
+                n.insert(DistanceTo(index, distance), node)
+                if n.size > num_neighbors_to_store:
+                    n.popright()
+        neighbors[i] = n
+    print("neighbors computed.")
+    sys.stdout.flush()
+
     path = list(range(dim))
     best_path = path.copy()
-    distance_path = sum([distance_matrix[path[i], path[i+1]] for i in range(dim-1)]
-                        + [distance_matrix[path[dim-1], path[0]]])
+    distance_path = sum([get_distance(path[i], path[i+1], distances) for i in range(dim-1)]
+                        + [get_distance(path[dim-1], path[0], distances)])
     distance_best_path = distance_path
     best_distances = [distance_best_path]
+    improvement_counter = 0
     counter = 0
-    # while counter < 1000000:
-    while counter < 10000:
-        # if counter != 0 and counter % 1000 == 0:
-        #     print("counter = %i" % counter)
-        best_distances.append(distance_best_path)
+
+    # while improvement_counter < 1000000:
+    while improvement_counter < 1000:
         counter += 1
+        # if improvement_counter != 0 and improvement_counter % 1000 == 0:
+        #     print("improvement_counter = %i" % improvement_counter)
+        if counter % 1000 == 0:
+            best_distances.append(distance_best_path)
+        improvement_counter += 1
         # restart with best path so far
         path = best_path.copy()
         distance_path = distance_best_path
         # choose starting vertex
+        # TODO: alternate between random start and start at one of the longest existing paths
         start = np.random.randint(dim)
         # print("dim = %d, start = %d" % (dim, start))
         # rearrange path so start is the start of the cycle
+        # TODO: Make path dllist and adjust rotation
         path = path[start:] + path[:start]
         # print("length of path = %d" % len(path))
         position_of_next = 1
@@ -74,11 +142,12 @@ def solve(points: List[Point]) -> Tuple[List[int], float, List[float]]:
         used_vertices = set()
         used_vertices.add(_next)
         for _ in range(100000):
-            # print(distance_dict[_next])
+            # print(closest_points[_next])
             # print("---------------------------------")
             close_to_next, distance = choose_close_unused_vertex(
-                distance_dict[_next],
-                current_distance=distance_matrix[path[0], _next],
+                neighbors[_next],
+                distances_to_point=get_distances_to_point(_next, distances),
+                current_distance=get_distance(path[0], _next, distances),
                 entropy=0.8,
                 vertices_not_to_choose=used_vertices
             )
@@ -86,18 +155,20 @@ def solve(points: List[Point]) -> Tuple[List[int], float, List[float]]:
             position_of_freed_up_element = path.index(close_to_next) - 1
             if close_to_next == path[0] or position_of_freed_up_element == position_of_next:
                 break
-            # TODO distance computation somehow broken
-            distance_path -= distance_matrix[path[0], _next]
-            distance_path += distance_matrix[_next, close_to_next]
+            distance_path -= get_distance(path[0], _next, distances)
+            distance_path += get_distance(_next, close_to_next, distances)
             freed_up_element = path[position_of_freed_up_element]
-            distance_path -= distance_matrix[path[position_of_freed_up_element], close_to_next]
-            distance_path += distance_matrix[path[0], path[position_of_freed_up_element]]
+            distance_path -= get_distance(path[position_of_freed_up_element], close_to_next, distances)
+            distance_path += get_distance(path[0], path[position_of_freed_up_element], distances)
             path = swap_elements(path, position_of_next, position_of_freed_up_element)
             if distance_path < distance_best_path:
                 distance_best_path = distance_path
                 # print("New best distance found: %.2f" % distance_best_path)
                 best_path = path.copy()
-                counter = 0
+                if counter % 100 == 0:
+                    print("New best path distance: %.2f" % distance_best_path)
+                    sys.stdout.flush()
+                improvement_counter = 0
             used_vertices.add(close_to_next)
             used_vertices.add(freed_up_element)
             _next = freed_up_element
