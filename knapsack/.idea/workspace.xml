@@ -24,7 +24,12 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dfed14cb-091c-4e38-b98e-74ec75614cfe" name="Default Changelist" comment="Adjust access rights." />
+    <list default="true" id="dfed14cb-091c-4e38-b98e-74ec75614cfe" name="Default Changelist" comment="Adjust access rights.">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tsp/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../tsp/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tsp/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../tsp/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -65,8 +70,8 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/out/artifacts/knapsack_jar/knapsack.jar" />
-    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="com.maddyhome.idea.vim.ui.VimEmulationConfigurable" />
@@ -96,7 +101,8 @@
     <configuration name="SolverJar" type="JarApplication">
       <option name="JAR_PATH" value="$PROJECT_DIR$/out/artifacts/knapsack_jar/knapsack.jar" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="ALTERNATIVE_JRE_PATH" value="14" />
       <method v="2">
         <option name="BuildArtifacts" enabled="true">
           <artifact name="knapsack:jar" />
@@ -138,6 +144,9 @@
       <workItem from="1588143775198" duration="22247000" />
       <workItem from="1588677466192" duration="1230000" />
       <workItem from="1588680051802" duration="553000" />
+      <workItem from="1590338444572" duration="455000" />
+      <workItem from="1590505253264" duration="150000" />
+      <workItem from="1590505417964" duration="8000" />
     </task>
     <task id="LOCAL-00001" summary="Add possibility to copy instance of Item.">
       <created>1587375460528</created>
@@ -185,6 +194,10 @@
     <option name="LAST_COMMIT_MESSAGE" value="fix" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="454" y="211" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1590338685383">
+      <screen x="72" y="27" width="1848" height="1053" />
+    </state>
+    <state x="454" y="211" key="#com.intellij.execution.impl.EditConfigurationsDialog/72.27.1848.1053@72.27.1848.1053" timestamp="1590338685383" />
     <state x="804" y="251" width="374" height="570" key="#com.intellij.ide.util.MemberChooser" timestamp="1587483175191">
       <screen x="67" y="27" width="1853" height="1052" />
     </state>
@@ -197,26 +210,34 @@
       <screen x="67" y="27" width="1853" height="1052" />
     </state>
     <state x="777" y="295" width="424" height="521" key="FileChooserDialogImpl/67.27.1853.1052@67.27.1853.1052" timestamp="1588680580697" />
-    <state width="1807" height="208" key="GridCell.Tab.0.bottom" timestamp="1588182776958">
-      <screen x="67" y="27" width="1853" height="1053" />
+    <state width="1802" height="205" key="GridCell.Tab.0.bottom" timestamp="1590338898926">
+      <screen x="72" y="27" width="1848" height="1053" />
     </state>
     <state width="1807" height="208" key="GridCell.Tab.0.bottom/67.27.1853.1052@67.27.1853.1052" timestamp="1588171738880" />
     <state width="1807" height="208" key="GridCell.Tab.0.bottom/67.27.1853.1053@67.27.1853.1053" timestamp="1588182776958" />
-    <state width="1807" height="208" key="GridCell.Tab.0.center" timestamp="1588182776955">
-      <screen x="67" y="27" width="1853" height="1053" />
+    <state width="1802" height="205" key="GridCell.Tab.0.bottom/72.27.1848.1053@72.27.1848.1053" timestamp="1590338898926" />
+    <state width="1802" height="205" key="GridCell.Tab.0.center" timestamp="1590338898925">
+      <screen x="72" y="27" width="1848" height="1053" />
     </state>
     <state width="1807" height="208" key="GridCell.Tab.0.center/67.27.1853.1052@67.27.1853.1052" timestamp="1588171738879" />
     <state width="1807" height="208" key="GridCell.Tab.0.center/67.27.1853.1053@67.27.1853.1053" timestamp="1588182776955" />
-    <state width="1807" height="208" key="GridCell.Tab.0.left" timestamp="1588182776954">
-      <screen x="67" y="27" width="1853" height="1053" />
+    <state width="1802" height="205" key="GridCell.Tab.0.center/72.27.1848.1053@72.27.1848.1053" timestamp="1590338898925" />
+    <state width="1802" height="205" key="GridCell.Tab.0.left" timestamp="1590338898924">
+      <screen x="72" y="27" width="1848" height="1053" />
     </state>
     <state width="1807" height="208" key="GridCell.Tab.0.left/67.27.1853.1052@67.27.1853.1052" timestamp="1588171738878" />
     <state width="1807" height="208" key="GridCell.Tab.0.left/67.27.1853.1053@67.27.1853.1053" timestamp="1588182776954" />
-    <state width="1807" height="208" key="GridCell.Tab.0.right" timestamp="1588182776957">
-      <screen x="67" y="27" width="1853" height="1053" />
+    <state width="1802" height="205" key="GridCell.Tab.0.left/72.27.1848.1053@72.27.1848.1053" timestamp="1590338898924" />
+    <state width="1802" height="205" key="GridCell.Tab.0.right" timestamp="1590338898926">
+      <screen x="72" y="27" width="1848" height="1053" />
     </state>
     <state width="1807" height="208" key="GridCell.Tab.0.right/67.27.1853.1052@67.27.1853.1052" timestamp="1588171738879" />
     <state width="1807" height="208" key="GridCell.Tab.0.right/67.27.1853.1053@67.27.1853.1053" timestamp="1588182776957" />
+    <state width="1802" height="205" key="GridCell.Tab.0.right/72.27.1848.1053@72.27.1848.1053" timestamp="1590338898926" />
+    <state x="479" y="131" width="1024" height="852" key="SettingsEditor" timestamp="1590338584577">
+      <screen x="72" y="27" width="1848" height="1053" />
+    </state>
+    <state x="479" y="131" width="1024" height="852" key="SettingsEditor/72.27.1848.1053@72.27.1848.1053" timestamp="1590338584577" />
     <state width="600" height="428" key="javadoc.popup" timestamp="1587482735821">
       <screen x="67" y="27" width="1853" height="1052" />
     </state>
@@ -234,78 +255,5 @@
     </state>
     <state x="656" y="251" width="672" height="678" key="search.everywhere.popup/67.27.1853.1052@67.27.1853.1052" timestamp="1588167954835" />
     <state x="656" y="251" width="672" height="679" key="search.everywhere.popup/67.27.1853.1053@67.27.1853.1053" timestamp="1587650881207" />
-  </component>
-  <component name="masterDetails">
-    <states>
-      <state key="ArtifactsStructureConfigurable.UI">
-        <settings>
-          <artifact-editor />
-          <last-edited>knapsack:jar</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-                <option value="0.5" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="FacetStructureConfigurable.UI">
-        <settings>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="GlobalLibrariesConfigurable.UI">
-        <settings>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="JdkListConfigurable.UI">
-        <settings>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ModuleStructureConfigurable.UI">
-        <settings>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ProjectLibrariesConfigurable.UI">
-        <settings>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-    </states>
   </component>
 </project>
