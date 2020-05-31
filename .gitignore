@@ -1,7 +1,7 @@
 *.zip
 
 # intellij files
-*/.idea/workspace.xml
+*/workspace.xml
 */out/
 */src/META-INF/
 
@@ -9,3 +9,6 @@
 
 #
 */.ipynb_checkpoints/*
+
+# saved data objects
+*.Pickle
