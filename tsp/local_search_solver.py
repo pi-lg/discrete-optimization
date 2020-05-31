@@ -6,6 +6,9 @@ from collections import namedtuple
 from llist import dllist
 import multiprocessing as mp
 import sys
+# TODO: remove below dependencies after testing
+import os
+import pickle
 
 DistanceTo = namedtuple("DistanceTo", ["index", "distance"])
 
@@ -36,7 +39,6 @@ def choose_close_unused_vertex(ordered_distances: List[DistanceTo], distances_to
     #     raise Exception("No more Points to")
 
 
-# TODO: Adjust swapping once path is a dllist
 def swap_elements(path: List[int], position_of_next: int, position_of_freed_up_element: int) -> List[int]:
     if position_of_next >= position_of_freed_up_element:
         raise Exception("First element %d is not smaller in position than second element %d"
@@ -51,7 +53,7 @@ def compute_distance(i: Point, j: Point):
     return np.sqrt((i.x - j.x)**2 + (i.y - j.y)**2)
 
 
-def compute_distances(start: int, dim: int, points: List[Point]) -> np.array:
+def compute_distances_to_point(start: int, dim: int, points: List[Point]) -> np.array:
     distances = np.zeros(dim - (start + 1))
     for later_point in range(start + 1, dim):
         distances[later_point - (start + 1)] = compute_distance(points[start], points[later_point])
@@ -72,14 +74,22 @@ def get_distances_to_point(index: int, distances: List[np.array]) -> np.array:
 
 
 def solve(points: List[Point], prop_of_closest_neighbors_to_store: float = 0.05, min_num_neighbors: int = 20,
-          max_num_neighbors: int = 100, prop_long_path_exploration: float = 0.2,
-          prop_of_edges_to_sample_to_find_long_path: float = 0.05) -> Tuple[List[int], float, List[float]]:
+          max_num_neighbors: int = 100, prop_long_path_exploration: float = 0.8,
+          prop_of_edges_to_sample_to_find_long_path: float = 0.1) -> Tuple[List[int], float, List[float]]:
     dim = len(points)
     print("number of points is: %i" % dim)
     sys.stdout.flush()
+    # file_name_distances_object = '_'.join(["distances", fn, ".Pickle"])
+    # if os.path.isfile(file_name_distances_object):
+    #     with open(file_name_distances_object, 'rb') as f:
+    #         distances = pickle.load(f)
+    # else:
     pool = mp.Pool(mp.cpu_count())
-    distances = [pool.apply(compute_distances, args=(start, dim, points)) for start in range(dim - 1)]
+    distances = [pool.apply(compute_distances_to_point, args=(start, dim, points)) for start in range(dim - 1)]
     pool.close()
+        # with open(file_name_distances_object, 'wb') as f:
+        #     pickle.dump(distances, f)
+
     # distance_matrix = np.zeros((dim, dim))
     # for i in range(dim):
     #     for j in range(i + 1, dim):
@@ -107,8 +117,8 @@ def solve(points: List[Point], prop_of_closest_neighbors_to_store: float = 0.05,
                 if n.size > num_neighbors_to_store:
                     n.popright()
         neighbors[i] = n
-    print("neighbors computed.")
-    sys.stdout.flush()
+    # print("neighbors computed.")
+    # sys.stdout.flush()
 
     path = list(range(dim))
     best_path = path.copy()
@@ -120,7 +130,7 @@ def solve(points: List[Point], prop_of_closest_neighbors_to_store: float = 0.05,
     counter = 0
 
     # while improvement_counter < 1000000:
-    while improvement_counter < 1000:
+    for i in range(50000):
         counter += 1
         # if improvement_counter != 0 and improvement_counter % 1000 == 0:
         #     print("improvement_counter = %i" % improvement_counter)
@@ -133,20 +143,18 @@ def solve(points: List[Point], prop_of_closest_neighbors_to_store: float = 0.05,
         # choose starting vertex
         if random.random() < prop_long_path_exploration:
             start, long_path_distance = (0, 0.0)
-            # sample_indices = sorted(
-            #     random.choices(range(dim), k=round(dim * prop_of_edges_to_sample_to_find_long_path)))
-            # for i in sample_indices:
-            for i in range(dim):
-                if random.random() < prop_of_edges_to_sample_to_find_long_path:
-                    distance = get_distance(path[i], path[i + 1 if i < (dim - 1) else 0], distances)
-                    if distance > long_path_distance:
-                        start = i
-                        long_path_distance = distance
+            sample_indices = random.choices(range(dim), k=round(dim * prop_of_edges_to_sample_to_find_long_path))
+            for j in sample_indices:
+            # for i in range(dim):
+            #     if random.random() < prop_of_edges_to_sample_to_find_long_path:
+                distance = get_distance(path[j], path[j + 1 if j + 1 < dim else 0], distances)
+                if distance > long_path_distance:
+                    start = j
+                    long_path_distance = distance
         else:
             start = np.random.randint(dim)
         # print("dim = %d, start = %d" % (dim, start))
         # rearrange path so start is the start of the cycle
-        # TODO: Make path dllist and adjust rotation
         path = path[start:] + path[:start]
         # print("length of path = %d" % len(path))
         position_of_next = 1
@@ -177,15 +185,14 @@ def solve(points: List[Point], prop_of_closest_neighbors_to_store: float = 0.05,
                 distance_best_path = distance_path
                 # print("New best distance found: %.2f" % distance_best_path)
                 best_path = path.copy()
-                if counter % 100 == 0:
-                    print("New best path distance: %.2f" % distance_best_path)
-                    sys.stdout.flush()
+                # if counter % 20 == 0:
+                #     print("New best path distance: %.2f" % distance_best_path)
+                #     sys.stdout.flush()
                 improvement_counter = 0
             used_vertices.add(close_to_next)
             used_vertices.add(freed_up_element)
             _next = freed_up_element
             # position_of_next = position_of_freed_up_element
-        # TODO introduce second stage where long vertices are eliminated?
 
     return best_path, distance_best_path, best_distances
 
