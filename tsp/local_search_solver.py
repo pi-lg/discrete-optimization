@@ -144,8 +144,10 @@ def solve(points: List[Point], prop_of_closest_neighbors_to_store: float = 0.05,
     #         distances = pickle.load(f)
     # else:
     pool = mp.Pool(mp.cpu_count())
-    distances = [pool.apply(compute_distances_to_point, args=(start, dim, points)) for start in range(dim - 1)]
+    async_results = [pool.apply_async(compute_distances_to_point, args=(start, dim, points)) for start in range(dim - 1)]
     pool.close()
+    pool.join()
+    distances = [async_result.get() for async_result in async_results]
         # with open(file_name_distances_object, 'wb') as f:
         #     pickle.dump(distances, f)
 
