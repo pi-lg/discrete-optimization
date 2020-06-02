@@ -16,7 +16,6 @@ DistanceTo = namedtuple("DistanceTo", ["index", "distance"])
 def choose_close_unused_vertex(ordered_distances: List[DistanceTo], distances_to_point: np.array,
                                current_distance: float, entropy: float = 0.0, vertices_not_to_choose: Set[int] = set()
                                ) -> Tuple[int, float]:
-    # if len(ordered_distances) > len(vertices_not_to_choose):
     available_points = set(
         [point.index for point in ordered_distances if point.distance <= current_distance]
     ).difference(vertices_not_to_choose)
@@ -33,10 +32,7 @@ def choose_close_unused_vertex(ordered_distances: List[DistanceTo], distances_to
                 if point.distance > current_distance:
                     break
                 elif random.random() >= entropy and point.index not in vertices_not_to_choose:
-                    # print("point %i is available" % point.index)
                     return point.index, point.distance
-    # else:
-    #     raise Exception("No more Points to")
 
 
 def swap_elements(path: List[int], position_of_next: int, position_of_freed_up_element: int) -> List[int]:
@@ -73,12 +69,75 @@ def get_distances_to_point(index: int, distances: List[np.array]) -> np.array:
         return np.concatenate((array, distances[index]))
 
 
+def run_with_random_start(distances, neighbors, prop_long_path_exploration,
+                          prop_of_edges_to_sample_to_find_long_path, num_iterations_per_exploration, start_path=None):
+    dim = len(distances) + 1
+    if not start_path:
+        start_path = list(np.random.permutation(dim))
+    best_path = start_path.copy()
+    distance_path = sum([get_distance(start_path[i], start_path[i + 1], distances) for i in range(dim - 1)]
+                        + [get_distance(start_path[dim - 1], start_path[0], distances)])
+    distance_best_path = distance_path
+
+    for i in range(num_iterations_per_exploration):
+        # restart with best path so far
+        start_path = best_path.copy()
+        distance_path = distance_best_path
+        # choose starting vertex
+        if random.random() < prop_long_path_exploration:
+            start, long_path_distance = (0, 0.0)
+            sample_indices = random.choices(range(dim), k=round(dim * prop_of_edges_to_sample_to_find_long_path))
+            for j in sample_indices:
+                distance = get_distance(start_path[j], start_path[j + 1 if j + 1 < dim else 0], distances)
+                if distance > long_path_distance:
+                    start = j
+                    long_path_distance = distance
+        else:
+            start = np.random.randint(dim)
+        # rearrange path so start is the start of the cycle
+        start_path = start_path[start:] + start_path[:start]
+        position_of_next = 1
+        _next = start_path[position_of_next]
+        used_vertices = set()
+        used_vertices.add(_next)
+        for _ in range(dim):
+            close_to_next, distance = choose_close_unused_vertex(
+                neighbors[_next],
+                distances_to_point=get_distances_to_point(_next, distances),
+                current_distance=get_distance(start_path[0], _next, distances),
+                entropy=0.8,
+                vertices_not_to_choose=used_vertices
+            )
+            position_of_freed_up_element = start_path.index(close_to_next) - 1
+            if close_to_next == start_path[0] or position_of_freed_up_element == position_of_next:
+                break
+            distance_path -= get_distance(start_path[0], _next, distances)
+            distance_path += get_distance(_next, close_to_next, distances)
+            freed_up_element = start_path[position_of_freed_up_element]
+            distance_path -= get_distance(start_path[position_of_freed_up_element], close_to_next, distances)
+            distance_path += get_distance(start_path[0], start_path[position_of_freed_up_element], distances)
+            start_path = swap_elements(start_path, position_of_next, position_of_freed_up_element)
+            if distance_path < distance_best_path:
+                distance_best_path = distance_path
+                best_path = start_path.copy()
+                improvement_counter = 0
+            used_vertices.add(close_to_next)
+            used_vertices.add(freed_up_element)
+            _next = freed_up_element
+
+    return best_path, distance_best_path
+
+
+# TODO: Code version which computes distances on the fly using List[Point] object when number of points is big
 def solve(points: List[Point], prop_of_closest_neighbors_to_store: float = 0.05, min_num_neighbors: int = 20,
-          max_num_neighbors: int = 100, prop_long_path_exploration: float = 0.8,
-          prop_of_edges_to_sample_to_find_long_path: float = 0.1) -> Tuple[List[int], float, List[float]]:
+          max_num_neighbors: int = 500, prop_long_path_exploration: float = 0.8,
+          prop_of_edges_to_sample_to_find_long_path: float = 0.1, num_iterations_per_exploration: int = 20000,
+          num_explorations=None
+          ) -> Tuple[List[int], float, List[float]]:
     dim = len(points)
-    print("number of points is: %i" % dim)
-    sys.stdout.flush()
+    # print("number of points is: %i" % dim)
+    # print("coordinates of first point: x = %i, y = %i" % (points[0].x, points[0].y))
+    # sys.stdout.flush()
     # file_name_distances_object = '_'.join(["distances", fn, ".Pickle"])
     # if os.path.isfile(file_name_distances_object):
     #     with open(file_name_distances_object, 'rb') as f:
@@ -89,15 +148,6 @@ def solve(points: List[Point], prop_of_closest_neighbors_to_store: float = 0.05,
     pool.close()
         # with open(file_name_distances_object, 'wb') as f:
         #     pickle.dump(distances, f)
-
-    # distance_matrix = np.zeros((dim, dim))
-    # for i in range(dim):
-    #     for j in range(i + 1, dim):
-    #         d = compute_distance(points[i], points[j])
-    #         distance_matrix[i, j] = d
-    #         distance_matrix[j, i] = d
-    # print("Distance MATRIX computed.")
-    # sys.stdout.flush()
 
     num_neighbors_to_store = min(max_num_neighbors,
                                  max(min_num_neighbors, round(prop_of_closest_neighbors_to_store * dim)))
@@ -116,85 +166,46 @@ def solve(points: List[Point], prop_of_closest_neighbors_to_store: float = 0.05,
                 n.insert(DistanceTo(index, distance), node)
                 if n.size > num_neighbors_to_store:
                     n.popright()
-        neighbors[i] = n
+        neighbors[i] = list(n)
     # print("neighbors computed.")
     # sys.stdout.flush()
 
-    path = list(range(dim))
-    best_path = path.copy()
-    distance_path = sum([get_distance(path[i], path[i+1], distances) for i in range(dim-1)]
-                        + [get_distance(path[dim-1], path[0], distances)])
-    distance_best_path = distance_path
-    best_distances = [distance_best_path]
-    improvement_counter = 0
-    counter = 0
+    # path = list(range(dim))
+    args = (
+        distances,
+        neighbors,
+        prop_long_path_exploration,
+        prop_of_edges_to_sample_to_find_long_path,
+        num_iterations_per_exploration
+    )
 
-    # while improvement_counter < 1000000:
-    for i in range(50000):
-        counter += 1
-        # if improvement_counter != 0 and improvement_counter % 1000 == 0:
-        #     print("improvement_counter = %i" % improvement_counter)
-        if counter % 1000 == 0:
-            best_distances.append(distance_best_path)
-        improvement_counter += 1
-        # restart with best path so far
-        path = best_path.copy()
-        distance_path = distance_best_path
-        # choose starting vertex
-        if random.random() < prop_long_path_exploration:
-            start, long_path_distance = (0, 0.0)
-            sample_indices = random.choices(range(dim), k=round(dim * prop_of_edges_to_sample_to_find_long_path))
-            for j in sample_indices:
-            # for i in range(dim):
-            #     if random.random() < prop_of_edges_to_sample_to_find_long_path:
-                distance = get_distance(path[j], path[j + 1 if j + 1 < dim else 0], distances)
-                if distance > long_path_distance:
-                    start = j
-                    long_path_distance = distance
-        else:
-            start = np.random.randint(dim)
-        # print("dim = %d, start = %d" % (dim, start))
-        # rearrange path so start is the start of the cycle
-        path = path[start:] + path[:start]
-        # print("length of path = %d" % len(path))
-        position_of_next = 1
-        _next = path[position_of_next]
-        used_vertices = set()
-        used_vertices.add(_next)
-        for _ in range(100000):
-            # print(closest_points[_next])
-            # print("---------------------------------")
-            close_to_next, distance = choose_close_unused_vertex(
-                neighbors[_next],
-                distances_to_point=get_distances_to_point(_next, distances),
-                current_distance=get_distance(path[0], _next, distances),
-                entropy=0.8,
-                vertices_not_to_choose=used_vertices
-            )
-            # print("_next = %i, close_to_next = %i" % (_next, close_to_next))
-            position_of_freed_up_element = path.index(close_to_next) - 1
-            if close_to_next == path[0] or position_of_freed_up_element == position_of_next:
-                break
-            distance_path -= get_distance(path[0], _next, distances)
-            distance_path += get_distance(_next, close_to_next, distances)
-            freed_up_element = path[position_of_freed_up_element]
-            distance_path -= get_distance(path[position_of_freed_up_element], close_to_next, distances)
-            distance_path += get_distance(path[0], path[position_of_freed_up_element], distances)
-            path = swap_elements(path, position_of_next, position_of_freed_up_element)
-            if distance_path < distance_best_path:
-                distance_best_path = distance_path
-                # print("New best distance found: %.2f" % distance_best_path)
-                best_path = path.copy()
-                # if counter % 20 == 0:
-                #     print("New best path distance: %.2f" % distance_best_path)
-                #     sys.stdout.flush()
-                improvement_counter = 0
-            used_vertices.add(close_to_next)
-            used_vertices.add(freed_up_element)
-            _next = freed_up_element
-            # position_of_next = position_of_freed_up_element
+    # print("Starting the exploration.")
+    # sys.stdout.flush()
+    pool = mp.Pool(mp.cpu_count())
+    results = []
 
-    return best_path, distance_best_path, best_distances
+    def populate_results(result):
+        results.append(result)
+
+    if not num_explorations:
+        num_explorations = 4 * mp.cpu_count()
+    for i in range(num_explorations):
+        r = pool.apply_async(run_with_random_start, args, callback=populate_results)
+    pool.close()
+    pool.join()
+    best_distance, best_path = (float('inf'), None)
+    for result in results:
+        if result[1] < best_distance:
+            best_distance = result[1]
+            best_path = result[0]
+    # print("Exploration is done. Best path distance found = %.2f" % best_distance)
+    # sys.stdout.flush()
+    best_path, best_distance = run_with_random_start(distances, neighbors, prop_long_path_exploration,
+                                                     prop_of_edges_to_sample_to_find_long_path, 5000, best_path)
+
+    return best_path, best_distance
+
+
 
 
 
