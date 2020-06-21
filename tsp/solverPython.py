@@ -5,9 +5,6 @@ import math
 from collections import namedtuple
 from utils import Point
 from local_search_solver import solve
-import os
-from subprocess import Popen, PIPE
-from multiprocessing import cpu_count
 
 
 def length(point1, point2):
@@ -16,26 +13,6 @@ def length(point1, point2):
 
 def solve_it(input_data):
     # Modify this code to run your optimization algorithm
-
-    # Writes the inputData to a temporary file
-
-    julia_dir = 'julia_local_search/src/'
-    tmp_file_name = 'tmp.data'
-    tmp_file = open(julia_dir + tmp_file_name, 'w')
-    tmp_file.write(input_data)
-    tmp_file.close()
-
-    # Runs the command: java Solver -file=tmp.data
-    os.environ["JULIA_NUM_THREADS"] = str(cpu_count())
-    process = Popen(['julia', 'julia_local_search/src/solverJulia.jl'
-                     , tmp_file_name
-                    ], stdout=PIPE, universal_newlines=True)
-    (stdout, stderr) = process.communicate()
-
-    # removes the temporary file
-    os.remove(julia_dir + tmp_file_name)
-
-    return stdout.strip()
 
     # parse the input
     lines = input_data.split('\n')
